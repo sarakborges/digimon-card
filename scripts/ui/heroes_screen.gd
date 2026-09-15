@@ -20,7 +20,7 @@ func _populate_heroes() -> void:
 	for child in hero_list.get_children():
 		child.queue_free()
 
-	var heroes: Array[Dictionary] = HERO_REPOSITORY.load_all()
+	var heroes: Array[Dictionary] = HERO_REPOSITORY.load_listed()
 	for hero in heroes:
 		var item = HERO_LIST_ITEM_SCENE.instantiate()
 		item.hero_data = hero
