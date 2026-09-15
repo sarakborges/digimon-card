@@ -22,8 +22,8 @@ func _populate_heroes() -> void:
 	var heroes: Array[Dictionary] = HERO_REPOSITORY.load_all()
 	for hero in heroes:
 		var item = HERO_LIST_ITEM_SCENE.instantiate()
+		item.hero_data = hero
 		hero_list.add_child(item)
-		item.call_deferred("setup", hero)
 
 
 func _on_side_menu_item_pressed(item_id: StringName) -> void:
