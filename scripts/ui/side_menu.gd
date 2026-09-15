@@ -57,7 +57,6 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 	button.add_theme_stylebox_override("hover", empty_style)
 	button.add_theme_stylebox_override("pressed", empty_style)
 	button.add_theme_stylebox_override("focus", empty_style)
-	button.add_theme_stylebox_override("disabled", empty_style)
 
 	var label := Label.new()
 	button.add_child(label)
@@ -77,8 +76,8 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 
 	var is_active := String(item_id) == active_item_id
 	if is_active:
-		button.disabled = true
 		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW
 		_apply_hover_style(label, true)
 		label.position.x = HOVER_OFFSET
