@@ -44,53 +44,75 @@ mouse_filter = 2
 texture = SubResource("GradientTexture_sidebar")
 expand_mode = 1
 
-[node name="Menu" type="VBoxContainer" parent="Sidebar"]
+[node name="Menu" type="Control" parent="Sidebar"]
 layout_mode = 1
 anchors_preset = 3
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 44.0
 offset_top = -284.0
-offset_right = 264.0
+offset_right = 300.0
 offset_bottom = -160.0
 grow_vertical = 0
-theme_override_constants/separation = 12
-alignment = 2
 
 [node name="LibraryButton" type="Button" parent="Sidebar/Menu"]
-custom_minimum_size = Vector2(220, 56)
-layout_mode = 2
+layout_mode = 0
+offset_right = 300.0
+offset_bottom = 56.0
 mouse_default_cursor_shape = 2
 focus_mode = 2
-theme_override_colors/font_color = Color(0.43, 0.66, 0.88, 1)
-theme_override_colors/font_hover_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_focus_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBox_menu")
 theme_override_styles/hover = SubResource("StyleBox_menu")
 theme_override_styles/pressed = SubResource("StyleBox_menu")
 theme_override_styles/focus = SubResource("StyleBox_menu")
+
+[node name="Label" type="Label" parent="Sidebar/Menu/LibraryButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.43, 0.66, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.36, 0.67, 1, 0)
+theme_override_colors/font_shadow_color = Color(0.36, 0.67, 1, 0)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 28
 text = "Library"
-alignment = 0
+vertical_alignment = 1
 
 [node name="ExitButton" type="Button" parent="Sidebar/Menu"]
-custom_minimum_size = Vector2(220, 56)
-layout_mode = 2
+layout_mode = 0
+offset_top = 68.0
+offset_right = 300.0
+offset_bottom = 124.0
 mouse_default_cursor_shape = 2
 focus_mode = 2
-theme_override_colors/font_color = Color(0.43, 0.66, 0.88, 1)
-theme_override_colors/font_hover_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_focus_color = Color(0.57, 0.77, 1, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0)
-theme_override_constants/outline_size = 0
-theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBox_menu")
 theme_override_styles/hover = SubResource("StyleBox_menu")
 theme_override_styles/pressed = SubResource("StyleBox_menu")
 theme_override_styles/focus = SubResource("StyleBox_menu")
+
+[node name="Label" type="Label" parent="Sidebar/Menu/ExitButton"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_colors/font_color = Color(0.43, 0.66, 0.88, 1)
+theme_override_colors/font_outline_color = Color(0.36, 0.67, 1, 0)
+theme_override_colors/font_shadow_color = Color(0.36, 0.67, 1, 0)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_font_sizes/font_size = 28
 text = "Exit Game"
-alignment = 0
+vertical_alignment = 1
