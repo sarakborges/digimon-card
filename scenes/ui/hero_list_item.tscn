@@ -1,20 +1,33 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hero_list_item.gd" id="1_item"]
 
 [sub_resource type="Shader" id="Shader_portrait"]
-code = "shader_type canvas_item;\n\nuniform vec4 border_color : source_color = vec4(0.36, 0.67, 1.0, 1.0);\nuniform float border_width = 0.055;\nuniform float edge_softness = 0.008;\nuniform float art_scale = 0.80;\n\nvoid fragment() {\n\tvec2 centered = UV - vec2(0.5);\n\tfloat distance_from_center = length(centered);\n\tfloat outer_alpha = 1.0 - smoothstep(0.5 - edge_softness, 0.5, distance_from_center);\n\tfloat inner_radius = 0.5 - border_width;\n\tfloat border_mix = smoothstep(inner_radius - edge_softness, inner_radius + edge_softness, distance_from_center);\n\n\tvec2 art_uv = centered / art_scale + vec2(0.5);\n\tart_uv = clamp(art_uv, vec2(0.0), vec2(1.0));\n\tvec4 art = texture(TEXTURE, art_uv);\n\tvec4 result = mix(art, border_color, border_mix);\n\tresult.a *= outer_alpha;\n\tCOLOR = result;\n}\n"
+code = "shader_type canvas_item;\n\nuniform vec4 border_color : source_color = vec4(0.36, 0.67, 1.0, 1.0);\nuniform float border_width = 0.045;\nuniform float edge_softness = 0.008;\nuniform float art_scale = 0.80;\nuniform float hover_amount = 0.0;\n\nvoid fragment() {\n\tvec2 centered = UV - vec2(0.5);\n\tfloat distance_from_center = length(centered);\n\tfloat outer_radius = 0.46;\n\tfloat inner_radius = outer_radius - border_width;\n\tfloat circle_alpha = 1.0 - smoothstep(outer_radius - edge_softness, outer_radius + edge_softness, distance_from_center);\n\tfloat border_mix = smoothstep(inner_radius - edge_softness, inner_radius + edge_softness, distance_from_center);\n\tfloat glow_alpha = (1.0 - smoothstep(outer_radius, 0.5, distance_from_center)) * hover_amount * 0.45;\n\n\tvec2 art_uv = centered / art_scale + vec2(0.5);\n\tart_uv = clamp(art_uv, vec2(0.0), vec2(1.0));\n\tvec4 art = texture(TEXTURE, art_uv);\n\tvec4 circle = mix(art, border_color, border_mix);\n\tcircle.a *= circle_alpha;\n\n\tvec3 final_rgb = mix(border_color.rgb, circle.rgb, circle.a);\n\tfloat final_alpha = max(circle.a, glow_alpha);\n\tCOLOR = vec4(final_rgb, final_alpha);\n}\n"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait"]
+resource_local_to_scene = true
 shader = SubResource("Shader_portrait")
 
-[node name="HeroListItem" type="HBoxContainer"]
+[sub_resource type="StyleBoxEmpty" id="StyleBox_hit_area"]
+
+[node name="HeroListItem" type="Control"]
 custom_minimum_size = Vector2(0, 148)
 layout_mode = 2
-theme_override_constants/separation = 24
+size_flags_horizontal = 3
 script = ExtResource("1_item")
 
-[node name="PortraitFrame" type="MarginContainer" parent="."]
+[node name="Content" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 24
+
+[node name="PortraitFrame" type="MarginContainer" parent="Content"]
 custom_minimum_size = Vector2(132, 132)
 layout_mode = 2
 size_flags_vertical = 0
@@ -23,7 +36,7 @@ theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
 theme_override_constants/margin_bottom = 4
 
-[node name="Portrait" type="TextureRect" parent="PortraitFrame"]
+[node name="Portrait" type="TextureRect" parent="Content/PortraitFrame"]
 material = SubResource("ShaderMaterial_portrait")
 custom_minimum_size = Vector2(124, 124)
 layout_mode = 2
@@ -32,20 +45,26 @@ texture_filter = 2
 expand_mode = 1
 stretch_mode = 5
 
-[node name="Text" type="VBoxContainer" parent="."]
+[node name="Text" type="VBoxContainer" parent="Content"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 0
 theme_override_constants/separation = 5
 
-[node name="Name" type="Label" parent="Text"]
+[node name="Name" type="Label" parent="Content/Text"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.36, 0.67, 1, 0)
+theme_override_colors/font_shadow_color = Color(0.36, 0.67, 1, 0)
+theme_override_constants/outline_size = 0
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 0
+theme_override_constants/shadow_outline_size = 0
 theme_override_font_sizes/font_size = 28
 text = "Hero"
 
-[node name="Description" type="Label" parent="Text"]
+[node name="Description" type="Label" parent="Content/Text"]
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
@@ -53,3 +72,17 @@ theme_override_colors/font_color = Color(0.78, 0.82, 0.88, 1)
 theme_override_font_sizes/font_size = 14
 text = "Description"
 autowrap_mode = 2
+
+[node name="HitArea" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_default_cursor_shape = 2
+focus_mode = 1
+theme_override_styles/normal = SubResource("StyleBox_hit_area")
+theme_override_styles/hover = SubResource("StyleBox_hit_area")
+theme_override_styles/pressed = SubResource("StyleBox_hit_area")
+theme_override_styles/focus = SubResource("StyleBox_hit_area")
