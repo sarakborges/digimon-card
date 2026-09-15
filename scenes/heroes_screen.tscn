@@ -46,7 +46,7 @@ horizontal_scroll_mode = 0
 [node name="HeroList" type="VBoxContainer" parent="HeroScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_constants/separation = 16
+theme_override_constants/separation = 32
 
 [node name="ReturnButton" type="Button" parent="."]
 layout_mode = 1
