@@ -23,7 +23,9 @@ func _populate_heroes() -> void:
 	var heroes: Array[Dictionary] = HERO_REPOSITORY.load_listed()
 	for hero in heroes:
 		var item = HERO_LIST_ITEM_SCENE.instantiate()
-		item.hero_data = hero
+		item.hero_id = String(hero.get("id", ""))
+		item.compact = true
+		item.interactive = true
 		item.hero_pressed.connect(_on_hero_pressed)
 		hero_list.add_child(item)
 
