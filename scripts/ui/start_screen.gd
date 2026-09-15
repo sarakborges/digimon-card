@@ -6,10 +6,10 @@ const HOVER_DURATION := 0.14
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
 const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
 
-@onready var library_button: Button = $Sidebar/Menu/LibraryButton
-@onready var exit_button: Button = $Sidebar/Menu/ExitButton
-@onready var library_label: Label = $Sidebar/Menu/LibraryButton/Label
-@onready var exit_label: Label = $Sidebar/Menu/ExitButton/Label
+@onready var library_button: Button = $Sidebar/LibraryButton
+@onready var exit_button: Button = $Sidebar/ExitButton
+@onready var library_label: Label = $Sidebar/LibraryButton/Label
+@onready var exit_label: Label = $Sidebar/ExitButton/Label
 
 var library_tween: Tween
 var exit_tween: Tween
