@@ -7,6 +7,7 @@ const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 var hero_id := ""
 
 @onready var side_menu = $SideMenu
+@onready var hero_scroll: ScrollContainer = $HeroScroll
 @onready var hero_content: VBoxContainer = $HeroScroll/HeroContent
 @onready var return_button: Button = $ReturnButton
 
@@ -33,10 +34,10 @@ func _load_hero() -> void:
 	hero_content.add_child(item)
 
 	var evolutions = hero.get("evolutions", [])
-	if evolutions.is_empty():
-		return
+	if not evolutions.is_empty():
+		_add_evolutions(evolutions)
 
-	_add_evolutions(evolutions)
+	call_deferred("_reset_scroll")
 
 
 func _add_evolutions(evolution_ids: Array) -> void:
@@ -65,6 +66,11 @@ func _add_evolutions(evolution_ids: Array) -> void:
 		evolution_item.interactive = true
 		evolution_item.hero_pressed.connect(_on_evolution_pressed)
 		evolution_list.add_child(evolution_item)
+
+
+func _reset_scroll() -> void:
+	hero_scroll.scroll_vertical = 0
+	hero_scroll.scroll_horizontal = 0
 
 
 func _clear_content() -> void:
