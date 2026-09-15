@@ -8,16 +8,24 @@ const HOVER_DURATION := 0.14
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
 const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
 
+@export var title_text := ""
 @export var item_ids: PackedStringArray = []
 @export var item_labels: PackedStringArray = []
 
+@onready var title_label: Label = $Title
 @onready var items_container: VBoxContainer = $Content/Items
 
 var _active_tweens: Dictionary = {}
 
 
 func _ready() -> void:
+	_apply_title()
 	_build_items()
+
+
+func _apply_title() -> void:
+	title_label.text = title_text
+	title_label.visible = not title_text.is_empty()
 
 
 func _build_items() -> void:
@@ -42,6 +50,7 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 	button.add_theme_stylebox_override("focus", empty_style)
 
 	var label := Label.new()
+	button.add_child(label)
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_color_override("font_color", Color.WHITE)
@@ -55,7 +64,6 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 	label.text = label_text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	button.add_child(label)
 
 	button.mouse_entered.connect(_set_hovered.bind(button, label, true))
 	button.mouse_exited.connect(_set_hovered.bind(button, label, false))
