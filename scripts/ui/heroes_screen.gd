@@ -2,6 +2,7 @@ extends Control
 
 const LIBRARY_SCENE := "res://scenes/library_screen.tscn"
 const HERO_LIST_ITEM_SCENE := preload("res://scenes/ui/hero_list_item.tscn")
+const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 
 @onready var side_menu = $SideMenu
 @onready var hero_list: VBoxContainer = $HeroScroll/HeroList
@@ -18,10 +19,11 @@ func _populate_heroes() -> void:
 	for child in hero_list.get_children():
 		child.queue_free()
 
-	for hero in HeroRepository.load_all():
+	var heroes: Array[Dictionary] = HERO_REPOSITORY.load_all()
+	for hero in heroes:
 		var item = HERO_LIST_ITEM_SCENE.instantiate()
 		hero_list.add_child(item)
-		item.setup(hero)
+		item.call_deferred("setup", hero)
 
 
 func _on_side_menu_item_pressed(item_id: StringName) -> void:
