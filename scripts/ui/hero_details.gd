@@ -8,7 +8,7 @@ var hero_id := ""
 
 @onready var side_menu = $SideMenu
 @onready var hero_scroll: ScrollContainer = $HeroScroll
-@onready var hero_content: VBoxContainer = $HeroScroll/HeroContent
+@onready var hero_content: VBoxContainer = $HeroScroll/ContentMargin/HeroContent
 @onready var return_button: Button = $ReturnButton
 
 
