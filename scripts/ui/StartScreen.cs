@@ -1,65 +1,68 @@
 using Godot;
-using System.Collections.Generic;
 
 namespace DigimonCard.UI;
 
 public partial class StartScreen : Control
 {
+    private const float RestingLabelX = 44.0f;
     private const float HoverOffset = 20.0f;
     private const double HoverDuration = 0.14;
 
-    private static readonly Color IdleOutline = new(0.0f, 0.0f, 0.0f, 0.0f);
-    private static readonly Color HoverOutline = new(0.36f, 0.67f, 1.0f, 0.42f);
-
-    private readonly Dictionary<Button, float> _restingX = new();
-    private readonly Dictionary<Button, Tween> _activeTweens = new();
+    private static readonly Color IdleGlow = new(0.36f, 0.67f, 1.0f, 0.0f);
+    private static readonly Color HoverGlow = new(0.36f, 0.67f, 1.0f, 0.38f);
 
     private Button _libraryButton = null!;
     private Button _exitButton = null!;
+    private Label _libraryLabel = null!;
+    private Label _exitLabel = null!;
+
+    private Tween? _libraryTween;
+    private Tween? _exitTween;
 
     public override void _Ready()
     {
         _libraryButton = GetNode<Button>("Sidebar/Menu/LibraryButton");
         _exitButton = GetNode<Button>("Sidebar/Menu/ExitButton");
+        _libraryLabel = GetNode<Label>("Sidebar/Menu/LibraryButton/Label");
+        _exitLabel = GetNode<Label>("Sidebar/Menu/ExitButton/Label");
 
+        _libraryButton.MouseEntered += OnLibraryHoverEntered;
+        _libraryButton.MouseExited += OnLibraryHoverExited;
+        _libraryButton.FocusEntered += OnLibraryHoverEntered;
+        _libraryButton.FocusExited += OnLibraryHoverExited;
+
+        _exitButton.MouseEntered += OnExitHoverEntered;
+        _exitButton.MouseExited += OnExitHoverExited;
+        _exitButton.FocusEntered += OnExitHoverEntered;
+        _exitButton.FocusExited += OnExitHoverExited;
         _exitButton.Pressed += OnExitPressed;
-
-        Callable.From(InitializeMenuInteractions).CallDeferred();
     }
 
-    private void InitializeMenuInteractions()
+    private void OnLibraryHoverEntered() => SetHovered(_libraryLabel, true, ref _libraryTween);
+
+    private void OnLibraryHoverExited() => SetHovered(_libraryLabel, false, ref _libraryTween);
+
+    private void OnExitHoverEntered() => SetHovered(_exitLabel, true, ref _exitTween);
+
+    private void OnExitHoverExited() => SetHovered(_exitLabel, false, ref _exitTween);
+
+    private void SetHovered(Label label, bool hovered, ref Tween? activeTween)
     {
-        ConfigureHover(_libraryButton);
-        ConfigureHover(_exitButton);
-    }
+        activeTween?.Kill();
 
-    private void ConfigureHover(Button button)
-    {
-        _restingX[button] = button.Position.X;
+        label.AddThemeColorOverride("font_outline_color", hovered ? HoverGlow : IdleGlow);
+        label.AddThemeColorOverride("font_shadow_color", hovered ? HoverGlow : IdleGlow);
+        label.AddThemeConstantOverride("outline_size", hovered ? 2 : 0);
+        label.AddThemeConstantOverride("shadow_outline_size", hovered ? 8 : 0);
+        label.AddThemeConstantOverride("shadow_offset_x", 0);
+        label.AddThemeConstantOverride("shadow_offset_y", 0);
 
-        button.MouseEntered += () => SetHovered(button, true);
-        button.MouseExited += () => SetHovered(button, false);
-        button.FocusEntered += () => SetHovered(button, true);
-        button.FocusExited += () => SetHovered(button, false);
-    }
+        float targetX = RestingLabelX + (hovered ? HoverOffset : 0.0f);
 
-    private void SetHovered(Button button, bool hovered)
-    {
-        if (_activeTweens.Remove(button, out Tween? currentTween))
-        {
-            currentTween.Kill();
-        }
-
-        float targetX = _restingX[button] + (hovered ? HoverOffset : 0.0f);
-        button.AddThemeColorOverride("font_outline_color", hovered ? HoverOutline : IdleOutline);
-        button.AddThemeConstantOverride("outline_size", hovered ? 6 : 0);
-
-        Tween tween = CreateTween();
-        tween.SetTrans(Tween.TransitionType.Cubic);
-        tween.SetEase(Tween.EaseType.Out);
-        tween.TweenProperty(button, "position:x", targetX, HoverDuration);
-
-        _activeTweens[button] = tween;
+        activeTween = CreateTween();
+        activeTween.SetTrans(Tween.TransitionType.Cubic);
+        activeTween.SetEase(Tween.EaseType.Out);
+        activeTween.TweenProperty(label, "position:x", targetX, HoverDuration);
     }
 
     private void OnExitPressed()
