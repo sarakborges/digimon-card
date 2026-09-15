@@ -18,6 +18,9 @@ var _hero_data: Dictionary = {}
 @onready var text_container: VBoxContainer = $Content/Text
 @onready var name_label: Label = $Content/Text/Name
 @onready var description_label: Label = $Content/Text/Description
+@onready var metadata: HBoxContainer = $Content/Text/Metadata
+@onready var fields_value: Label = $Content/Text/Metadata/Fields/Value
+@onready var element_value: Label = $Content/Text/Metadata/Element/Value
 @onready var hit_area: Button = $HitArea
 
 
@@ -45,8 +48,9 @@ func _configure_layout() -> void:
 		name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		name_label.add_theme_font_size_override("font_size", 24)
 		description_label.visible = false
+		metadata.visible = false
 	else:
-		custom_minimum_size = Vector2(0.0, 148.0)
+		custom_minimum_size = Vector2(0.0, 196.0)
 		content.add_theme_constant_override("separation", 24)
 		portrait_frame.custom_minimum_size = Vector2(132.0, 132.0)
 		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
@@ -56,10 +60,11 @@ func _configure_layout() -> void:
 		portrait_frame.add_theme_constant_override("margin_bottom", 4)
 		portrait.custom_minimum_size = Vector2(124.0, 124.0)
 		text_container.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-		text_container.add_theme_constant_override("separation", 5)
+		text_container.add_theme_constant_override("separation", 8)
 		name_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		name_label.add_theme_font_size_override("font_size", 28)
 		description_label.visible = true
+		metadata.visible = true
 
 
 func _configure_interaction() -> void:
@@ -87,6 +92,8 @@ func _apply_data() -> void:
 
 	name_label.text = String(_hero_data.get("name", ""))
 	description_label.text = String(_hero_data.get("description", ""))
+	fields_value.text = _format_values(_hero_data.get("fields", []))
+	element_value.text = _format_values(_hero_data.get("elements", []))
 
 	var art_path := String(_hero_data.get("art_path", ""))
 	if art_path.is_empty():
@@ -99,6 +106,19 @@ func _apply_data() -> void:
 		return
 
 	portrait.texture = texture
+
+
+func _format_values(values_variant: Variant) -> String:
+	if typeof(values_variant) != TYPE_ARRAY:
+		return "—"
+
+	var values: Array[String] = []
+	for value_variant in values_variant:
+		var value := String(value_variant).strip_edges()
+		if not value.is_empty():
+			values.append(value)
+
+	return "\n".join(values) if not values.is_empty() else "—"
 
 
 func _load_png_texture(path: String) -> ImageTexture:
