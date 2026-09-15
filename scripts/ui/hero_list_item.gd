@@ -45,12 +45,28 @@ func _apply_data() -> void:
 		push_warning("Hero art path is empty")
 		return
 
-	var texture := load(art_path) as Texture2D
+	var texture := _load_png_texture(art_path)
 	if texture == null:
 		push_warning("Unable to load hero art: %s" % art_path)
 		return
 
 	portrait.texture = texture
+
+
+func _load_png_texture(path: String) -> ImageTexture:
+	if not FileAccess.file_exists(path):
+		return null
+
+	var bytes := FileAccess.get_file_as_bytes(path)
+	if bytes.is_empty():
+		return null
+
+	var image := Image.new()
+	var error := image.load_png_from_buffer(bytes)
+	if error != OK:
+		return null
+
+	return ImageTexture.create_from_image(image)
 
 
 func _set_hovered(hovered: bool) -> void:
