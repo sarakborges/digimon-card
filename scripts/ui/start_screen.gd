@@ -1,6 +1,6 @@
 extends Control
 
-const RESTING_LABEL_X := 44.0
+const RESTING_LABEL_X := 0.0
 const HOVER_OFFSET := 20.0
 const HOVER_DURATION := 0.14
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
