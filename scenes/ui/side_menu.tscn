@@ -1,0 +1,45 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/side_menu.gd" id="1_side_menu"]
+
+[sub_resource type="Gradient" id="Gradient_sidebar"]
+offsets = PackedFloat32Array(0, 1)
+colors = PackedColorArray(0, 0, 0, 0.5, 0, 0, 0, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture_sidebar"]
+gradient = SubResource("Gradient_sidebar")
+width = 300
+height = 1
+fill_from = Vector2(0, 0.5)
+fill_to = Vector2(1, 0.5)
+
+[node name="SideMenu" type="TextureRect"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 300.0
+grow_vertical = 2
+mouse_filter = 1
+texture = SubResource("GradientTexture_sidebar")
+expand_mode = 1
+clip_contents = true
+script = ExtResource("1_side_menu")
+
+[node name="Content" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 32
+theme_override_constants/margin_right = 32
+theme_override_constants/margin_bottom = 32
+mouse_filter = 1
+
+[node name="Items" type="VBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 0
+alignment = 2
+mouse_filter = 1
