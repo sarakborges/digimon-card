@@ -45,7 +45,7 @@ func _add_evolutions(evolution_ids: Array) -> void:
 	hero_content.add_child(block)
 
 	var title := Label.new()
-	title.text = "Evolutions"
+	title.text = "Evolves to"
 	title.add_theme_color_override("font_color", Color.WHITE)
 	title.add_theme_font_size_override("font_size", 24)
 	block.add_child(title)
