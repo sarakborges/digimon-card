@@ -1,4 +1,3 @@
-class_name HeroRepository
 extends RefCounted
 
 const HERO_DATA_DIR := "res://data/heroes"
@@ -30,12 +29,13 @@ static func _load_hero(path: String) -> Dictionary:
 		return {}
 
 	var parsed = JSON.parse_string(file.get_as_text())
-	if not parsed is Dictionary:
+	if typeof(parsed) != TYPE_DICTIONARY:
 		push_warning("Invalid hero JSON: %s" % path)
 		return {}
 
-	var id := String(parsed.get("id", "")).strip_edges()
-	var name := String(parsed.get("name", "")).strip_edges()
+	var hero_data: Dictionary = parsed
+	var id := String(hero_data.get("id", "")).strip_edges()
+	var name := String(hero_data.get("name", "")).strip_edges()
 	if id.is_empty() or name.is_empty():
 		push_warning("Hero data requires id and name: %s" % path)
 		return {}
