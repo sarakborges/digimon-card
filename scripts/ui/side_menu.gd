@@ -11,6 +11,7 @@ const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
 @export var title_text := ""
 @export var item_ids: PackedStringArray = []
 @export var item_labels: PackedStringArray = []
+@export var active_item_id := ""
 
 @onready var title_label: Label = $Title
 @onready var items_container: VBoxContainer = $Content/Items
@@ -48,6 +49,7 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 	button.add_theme_stylebox_override("hover", empty_style)
 	button.add_theme_stylebox_override("pressed", empty_style)
 	button.add_theme_stylebox_override("focus", empty_style)
+	button.add_theme_stylebox_override("disabled", empty_style)
 
 	var label := Label.new()
 	button.add_child(label)
@@ -65,11 +67,19 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
-	button.mouse_entered.connect(_set_hovered.bind(button, label, true))
-	button.mouse_exited.connect(_set_hovered.bind(button, label, false))
-	button.focus_entered.connect(_set_hovered.bind(button, label, true))
-	button.focus_exited.connect(_set_hovered.bind(button, label, false))
-	button.pressed.connect(_on_item_pressed.bind(item_id))
+	var is_active := String(item_id) == active_item_id
+	if is_active:
+		button.disabled = true
+		button.focus_mode = Control.FOCUS_NONE
+		button.mouse_default_cursor_shape = Control.CURSOR_ARROW
+		_apply_hover_style(label, true)
+		label.position.x = HOVER_OFFSET
+	else:
+		button.mouse_entered.connect(_set_hovered.bind(button, label, true))
+		button.mouse_exited.connect(_set_hovered.bind(button, label, false))
+		button.focus_entered.connect(_set_hovered.bind(button, label, true))
+		button.focus_exited.connect(_set_hovered.bind(button, label, false))
+		button.pressed.connect(_on_item_pressed.bind(item_id))
 
 	return button
 
@@ -79,17 +89,21 @@ func _set_hovered(button: Button, label: Label, hovered: bool) -> void:
 	if active_tween != null and active_tween.is_valid():
 		active_tween.kill()
 
-	var glow := HOVER_GLOW if hovered else IDLE_GLOW
-	label.add_theme_color_override("font_outline_color", glow)
-	label.add_theme_color_override("font_shadow_color", glow)
-	label.add_theme_constant_override("outline_size", 2 if hovered else 0)
-	label.add_theme_constant_override("shadow_outline_size", 8 if hovered else 0)
+	_apply_hover_style(label, hovered)
 
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.set_ease(Tween.EASE_OUT)
 	tween.tween_property(label, "position:x", HOVER_OFFSET if hovered else 0.0, HOVER_DURATION)
 	_active_tweens[button] = tween
+
+
+func _apply_hover_style(label: Label, hovered: bool) -> void:
+	var glow := HOVER_GLOW if hovered else IDLE_GLOW
+	label.add_theme_color_override("font_outline_color", glow)
+	label.add_theme_color_override("font_shadow_color", glow)
+	label.add_theme_constant_override("outline_size", 2 if hovered else 0)
+	label.add_theme_constant_override("shadow_outline_size", 8 if hovered else 0)
 
 
 func _on_item_pressed(item_id: StringName) -> void:
