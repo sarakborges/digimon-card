@@ -29,6 +29,23 @@ func _populate_heroes() -> void:
 		item.hero_pressed.connect(_on_hero_pressed)
 		hero_list.add_child(item)
 
+	call_deferred("_sync_list_minimum_height")
+
+
+func _sync_list_minimum_height() -> void:
+	var height := 0.0
+	var item_count := 0
+
+	for child in hero_list.get_children():
+		if child is Control and child.visible:
+			height += child.get_combined_minimum_size().y
+			item_count += 1
+
+	if item_count > 1:
+		height += float(hero_list.get_theme_constant("separation")) * float(item_count - 1)
+
+	hero_list.custom_minimum_size.y = height
+
 
 func _on_hero_pressed(hero_id: String) -> void:
 	var details = HERO_DETAILS_SCENE.instantiate()
