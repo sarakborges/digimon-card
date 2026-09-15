@@ -24,7 +24,7 @@ public partial class StartScreen : Control
 
         _exitButton.Pressed += OnExitPressed;
 
-        CallDeferred(MethodName.InitializeMenuInteractions);
+        Callable.From(InitializeMenuInteractions).CallDeferred();
     }
 
     private void InitializeMenuInteractions()
