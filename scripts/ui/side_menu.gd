@@ -26,6 +26,12 @@ func _ready() -> void:
 	_build_items()
 
 
+func set_title(value: String) -> void:
+	title_text = value
+	if is_node_ready():
+		_apply_title()
+
+
 func _apply_title() -> void:
 	title_label.text = title_text
 	title_label.visible = not title_text.is_empty()
@@ -50,7 +56,7 @@ func _create_item(item_id: StringName, label_text: String) -> Control:
 	var item := Control.new()
 	item.custom_minimum_size = Vector2(0.0, ITEM_HEIGHT)
 	item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	item.clip_contents = true
+	item.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
 	var button := Button.new()
 	item.add_child(button)
@@ -64,8 +70,13 @@ func _create_item(item_id: StringName, label_text: String) -> Control:
 	button.add_theme_stylebox_override("pressed", empty_style)
 	button.add_theme_stylebox_override("focus", empty_style)
 
+	var text_holder := Control.new()
+	item.add_child(text_holder)
+	text_holder.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	text_holder.mouse_filter = Control.MOUSE_FILTER_IGNORE
+
 	var label := Label.new()
-	item.add_child(label)
+	text_holder.add_child(label)
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_color_override("font_color", Color.WHITE)
@@ -86,18 +97,18 @@ func _create_item(item_id: StringName, label_text: String) -> Control:
 		button.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		button.mouse_default_cursor_shape = Control.CURSOR_ARROW
 		_apply_hover_style(label, true)
-		label.position.x = HOVER_OFFSET
+		text_holder.position = Vector2(HOVER_OFFSET, 0.0)
 	else:
-		button.mouse_entered.connect(_set_hovered.bind(button, label, true))
-		button.mouse_exited.connect(_set_hovered.bind(button, label, false))
-		button.focus_entered.connect(_set_hovered.bind(button, label, true))
-		button.focus_exited.connect(_set_hovered.bind(button, label, false))
+		button.mouse_entered.connect(_set_hovered.bind(button, text_holder, label, true))
+		button.mouse_exited.connect(_set_hovered.bind(button, text_holder, label, false))
+		button.focus_entered.connect(_set_hovered.bind(button, text_holder, label, true))
+		button.focus_exited.connect(_set_hovered.bind(button, text_holder, label, false))
 		button.pressed.connect(_on_item_pressed.bind(item_id))
 
 	return item
 
 
-func _set_hovered(button: Button, label: Label, hovered: bool) -> void:
+func _set_hovered(button: Button, text_holder: Control, label: Label, hovered: bool) -> void:
 	var active_tween: Tween = _active_tweens.get(button)
 	if active_tween != null and active_tween.is_valid():
 		active_tween.kill()
@@ -107,7 +118,12 @@ func _set_hovered(button: Button, label: Label, hovered: bool) -> void:
 	var tween := create_tween()
 	tween.set_trans(Tween.TRANS_CUBIC)
 	tween.set_ease(Tween.EASE_OUT)
-	tween.tween_property(label, "position:x", HOVER_OFFSET if hovered else 0.0, HOVER_DURATION)
+	tween.tween_property(
+		text_holder,
+		"position",
+		Vector2(HOVER_OFFSET if hovered else 0.0, 0.0),
+		HOVER_DURATION
+	)
 	_active_tweens[button] = tween
 
 
