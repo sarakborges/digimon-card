@@ -4,4 +4,8 @@
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
+  <ItemGroup Condition="Exists('../card-engine/src/CardEngine.Core/CardEngine.Core.csproj')">
+    <ProjectReference Include="../card-engine/src/CardEngine.Core/CardEngine.Core.csproj" />
+  </ItemGroup>
 </Project>
