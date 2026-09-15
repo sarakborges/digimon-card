@@ -40,25 +40,20 @@ anchors_preset = 9
 anchor_bottom = 1.0
 offset_right = 300.0
 grow_vertical = 2
-mouse_filter = 2
+mouse_filter = 1
 texture = SubResource("GradientTexture_sidebar")
 expand_mode = 1
+clip_contents = true
 
-[node name="Menu" type="Control" parent="Sidebar"]
+[node name="LibraryButton" type="Button" parent="Sidebar"]
 layout_mode = 1
-anchors_preset = 3
 anchor_top = 1.0
+anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 20.0
 offset_top = -284.0
-offset_right = 280.0
-offset_bottom = -160.0
-grow_vertical = 0
-
-[node name="LibraryButton" type="Button" parent="Sidebar/Menu"]
-layout_mode = 0
-offset_right = 260.0
-offset_bottom = 56.0
+offset_right = -20.0
+offset_bottom = -228.0
 mouse_default_cursor_shape = 2
 focus_mode = 2
 theme_override_styles/normal = SubResource("StyleBox_menu")
@@ -66,7 +61,7 @@ theme_override_styles/hover = SubResource("StyleBox_menu")
 theme_override_styles/pressed = SubResource("StyleBox_menu")
 theme_override_styles/focus = SubResource("StyleBox_menu")
 
-[node name="Label" type="Label" parent="Sidebar/Menu/LibraryButton"]
+[node name="Label" type="Label" parent="Sidebar/LibraryButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -86,11 +81,15 @@ text = "Library"
 horizontal_alignment = 0
 vertical_alignment = 1
 
-[node name="ExitButton" type="Button" parent="Sidebar/Menu"]
-layout_mode = 0
-offset_top = 68.0
-offset_right = 260.0
-offset_bottom = 124.0
+[node name="ExitButton" type="Button" parent="Sidebar"]
+layout_mode = 1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -216.0
+offset_right = -20.0
+offset_bottom = -160.0
 mouse_default_cursor_shape = 2
 focus_mode = 2
 theme_override_styles/normal = SubResource("StyleBox_menu")
@@ -98,7 +97,7 @@ theme_override_styles/hover = SubResource("StyleBox_menu")
 theme_override_styles/pressed = SubResource("StyleBox_menu")
 theme_override_styles/focus = SubResource("StyleBox_menu")
 
-[node name="Label" type="Label" parent="Sidebar/Menu/ExitButton"]
+[node name="Label" type="Label" parent="Sidebar/ExitButton"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
