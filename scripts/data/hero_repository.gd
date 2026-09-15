@@ -1,25 +1,37 @@
 extends RefCounted
 
 const HERO_DATA_DIR := "res://data/heroes"
+const HERO_INDEX_PATH := HERO_DATA_DIR + "/index.json"
 const HERO_ASSET_DIR := "res://assets/heroes"
 
 
 static func load_all() -> Array[Dictionary]:
 	var heroes: Array[Dictionary] = []
-	var files := DirAccess.get_files_at(HERO_DATA_DIR)
+	var manifest_file := FileAccess.open(HERO_INDEX_PATH, FileAccess.READ)
+	if manifest_file == null:
+		push_warning("Unable to read hero manifest: %s" % HERO_INDEX_PATH)
+		return heroes
 
-	for file_name in files:
-		if not file_name.ends_with(".json"):
+	var parsed_manifest = JSON.parse_string(manifest_file.get_as_text())
+	if typeof(parsed_manifest) != TYPE_ARRAY:
+		push_warning("Invalid hero manifest: %s" % HERO_INDEX_PATH)
+		return heroes
+
+	for file_name_variant in parsed_manifest:
+		var file_name := String(file_name_variant).strip_edges()
+		if file_name.is_empty():
 			continue
 
 		var hero := _load_hero("%s/%s" % [HERO_DATA_DIR, file_name])
 		if not hero.is_empty():
 			heroes.append(hero)
 
-	heroes.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
-		return String(a["name"]).nocasecmp_to(String(b["name"])) < 0
-	)
+	heroes.sort_custom(_sort_by_name)
 	return heroes
+
+
+static func _sort_by_name(a: Dictionary, b: Dictionary) -> bool:
+	return String(a["name"]).nocasecmp_to(String(b["name"])) < 0
 
 
 static func _load_hero(path: String) -> Dictionary:
@@ -41,7 +53,7 @@ static func _load_hero(path: String) -> Dictionary:
 		return {}
 
 	var art_path := "%s/%s.png" % [HERO_ASSET_DIR, id]
-	if not ResourceLoader.exists(art_path):
+	if not FileAccess.file_exists(art_path):
 		push_warning("Hero art not found: %s" % art_path)
 
 	return {
