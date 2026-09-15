@@ -2,21 +2,56 @@ extends Control
 
 signal hero_pressed(hero_id: String)
 
+const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
 const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
 
-var hero_data: Dictionary = {}
-var interactive := true
+@export var hero_id := ""
+@export var compact := true
+@export var interactive := true
 
+var _hero_data: Dictionary = {}
+
+@onready var content: HBoxContainer = $Content
+@onready var portrait_frame: MarginContainer = $Content/PortraitFrame
 @onready var portrait: TextureRect = $Content/PortraitFrame/Portrait
+@onready var text_container: VBoxContainer = $Content/Text
 @onready var name_label: Label = $Content/Text/Name
 @onready var description_label: Label = $Content/Text/Description
 @onready var hit_area: Button = $HitArea
 
 
 func _ready() -> void:
+	_configure_layout()
 	_apply_data()
 	_configure_interaction()
+
+
+func _configure_layout() -> void:
+	if compact:
+		custom_minimum_size = Vector2(0.0, 52.0)
+		content.add_theme_constant_override("separation", 12)
+		portrait_frame.custom_minimum_size = Vector2(48.0, 48.0)
+		portrait_frame.add_theme_constant_override("margin_left", 2)
+		portrait_frame.add_theme_constant_override("margin_top", 2)
+		portrait_frame.add_theme_constant_override("margin_right", 2)
+		portrait_frame.add_theme_constant_override("margin_bottom", 2)
+		portrait.custom_minimum_size = Vector2(44.0, 44.0)
+		text_container.add_theme_constant_override("separation", 0)
+		name_label.add_theme_font_size_override("font_size", 24)
+		description_label.visible = false
+	else:
+		custom_minimum_size = Vector2(0.0, 148.0)
+		content.add_theme_constant_override("separation", 24)
+		portrait_frame.custom_minimum_size = Vector2(132.0, 132.0)
+		portrait_frame.add_theme_constant_override("margin_left", 4)
+		portrait_frame.add_theme_constant_override("margin_top", 4)
+		portrait_frame.add_theme_constant_override("margin_right", 4)
+		portrait_frame.add_theme_constant_override("margin_bottom", 4)
+		portrait.custom_minimum_size = Vector2(124.0, 124.0)
+		text_container.add_theme_constant_override("separation", 5)
+		name_label.add_theme_font_size_override("font_size", 28)
+		description_label.visible = true
 
 
 func _configure_interaction() -> void:
@@ -34,15 +69,20 @@ func _configure_interaction() -> void:
 
 
 func _apply_data() -> void:
-	if hero_data.is_empty():
+	if hero_id.is_empty():
+		push_warning("Hero item requires hero_id")
 		return
 
-	name_label.text = String(hero_data.get("name", ""))
-	description_label.text = String(hero_data.get("description", ""))
+	_hero_data = HERO_REPOSITORY.load_by_id(hero_id)
+	if _hero_data.is_empty():
+		return
 
-	var art_path := String(hero_data.get("art_path", ""))
+	name_label.text = String(_hero_data.get("name", ""))
+	description_label.text = String(_hero_data.get("description", ""))
+
+	var art_path := String(_hero_data.get("art_path", ""))
 	if art_path.is_empty():
-		push_warning("Hero art path is empty")
+		push_warning("Hero art path is empty: %s" % hero_id)
 		return
 
 	var texture := _load_png_texture(art_path)
@@ -82,6 +122,5 @@ func _set_hovered(hovered: bool) -> void:
 
 
 func _on_pressed() -> void:
-	var hero_id := String(hero_data.get("id", ""))
 	if not hero_id.is_empty():
 		hero_pressed.emit(hero_id)
