@@ -48,6 +48,7 @@ static func _load_hero(path: String) -> Dictionary:
 	var hero_data: Dictionary = parsed
 	var id := String(hero_data.get("id", "")).strip_edges()
 	var name := String(hero_data.get("name", "")).strip_edges()
+	var description := String(hero_data.get("description", "")).strip_edges()
 	if id.is_empty() or name.is_empty():
 		push_warning("Hero data requires id and name: %s" % path)
 		return {}
@@ -59,5 +60,6 @@ static func _load_hero(path: String) -> Dictionary:
 	return {
 		"id": id,
 		"name": name,
+		"description": description,
 		"art_path": art_path,
 	}
