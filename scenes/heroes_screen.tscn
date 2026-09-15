@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/heroes_screen.gd" id="1_heroes"]
 [ext_resource type="PackedScene" path="res://scenes/ui/side_menu.tscn" id="2_side_menu"]
+[ext_resource type="Script" path="res://scripts/ui/glow_button.gd" id="3_glow"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBox_button"]
 
@@ -63,9 +64,6 @@ grow_vertical = 0
 mouse_default_cursor_shape = 2
 focus_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_colors/font_hover_color = Color(0.72, 0.84, 1, 1)
-theme_override_colors/font_pressed_color = Color(0.72, 0.84, 1, 1)
-theme_override_colors/font_focus_color = Color(0.72, 0.84, 1, 1)
 theme_override_font_sizes/font_size = 28
 theme_override_styles/normal = SubResource("StyleBox_button")
 theme_override_styles/hover = SubResource("StyleBox_button")
@@ -73,3 +71,4 @@ theme_override_styles/pressed = SubResource("StyleBox_button")
 theme_override_styles/focus = SubResource("StyleBox_button")
 text = "Return"
 alignment = 2
+script = ExtResource("3_glow")
