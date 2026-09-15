@@ -7,14 +7,13 @@ const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 var hero_id := ""
 
 @onready var side_menu = $SideMenu
-@onready var hero_content: VBoxContainer = $HeroContent
+@onready var hero_content: VBoxContainer = $HeroScroll/HeroContent
 @onready var return_button: Button = $ReturnButton
 
 
 func _ready() -> void:
 	side_menu.item_pressed.connect(_on_side_menu_item_pressed)
 	return_button.pressed.connect(_on_return_pressed)
-	hero_content.add_theme_constant_override("separation", 28)
 	_load_hero()
 
 
