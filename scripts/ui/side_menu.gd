@@ -5,6 +5,7 @@ signal item_pressed(item_id: StringName)
 const ITEM_HEIGHT := 56.0
 const HOVER_OFFSET := 8.0
 const HOVER_DURATION := 0.14
+const TITLE_RIGHT_MARGIN := 32.0
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
 const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
 
@@ -20,6 +21,7 @@ var _active_tweens: Dictionary = {}
 
 
 func _ready() -> void:
+	get_viewport().size_changed.connect(_update_title_width)
 	_apply_title()
 	_build_items()
 
@@ -27,6 +29,12 @@ func _ready() -> void:
 func _apply_title() -> void:
 	title_label.text = title_text
 	title_label.visible = not title_text.is_empty()
+	_update_title_width()
+
+
+func _update_title_width() -> void:
+	var viewport_width := get_viewport_rect().size.x
+	title_label.size.x = maxf(0.0, viewport_width - title_label.position.x - TITLE_RIGHT_MARGIN)
 
 
 func _build_items() -> void:
