@@ -46,9 +46,15 @@ func _build_items() -> void:
 		items_container.add_child(_create_item(StringName(item_ids[index]), item_labels[index]))
 
 
-func _create_item(item_id: StringName, label_text: String) -> Button:
+func _create_item(item_id: StringName, label_text: String) -> Control:
+	var item := Control.new()
+	item.custom_minimum_size = Vector2(0.0, ITEM_HEIGHT)
+	item.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	item.clip_contents = true
+
 	var button := Button.new()
-	button.custom_minimum_size = Vector2(0.0, ITEM_HEIGHT)
+	item.add_child(button)
+	button.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	button.focus_mode = Control.FOCUS_ALL
 	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 
@@ -88,7 +94,7 @@ func _create_item(item_id: StringName, label_text: String) -> Button:
 		button.focus_exited.connect(_set_hovered.bind(button, label, false))
 		button.pressed.connect(_on_item_pressed.bind(item_id))
 
-	return button
+	return item
 
 
 func _set_hovered(button: Button, label: Label, hovered: bool) -> void:
