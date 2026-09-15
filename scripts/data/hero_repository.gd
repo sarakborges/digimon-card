@@ -71,15 +71,9 @@ static func _load_hero(path: String) -> Dictionary:
 		push_warning("Hero data requires id and name: %s" % path)
 		return {}
 
-	var evolutions: Array[String] = []
-	var raw_evolutions = hero_data.get("evolutions", [])
-	if typeof(raw_evolutions) == TYPE_ARRAY:
-		for evolution_variant in raw_evolutions:
-			var evolution_id := String(evolution_variant).strip_edges()
-			if not evolution_id.is_empty():
-				evolutions.append(evolution_id)
-	elif hero_data.has("evolutions"):
-		push_warning("Hero evolutions must be an array: %s" % path)
+	var fields := _read_string_array(hero_data, "fields", path)
+	var elements := _read_string_array(hero_data, "elements", path)
+	var evolutions := _read_string_array(hero_data, "evolutions", path)
 
 	var art_path := "%s/%s.png" % [HERO_ASSET_DIR, id]
 	if not FileAccess.file_exists(art_path):
@@ -89,6 +83,22 @@ static func _load_hero(path: String) -> Dictionary:
 		"id": id,
 		"name": name,
 		"description": description,
+		"fields": fields,
+		"elements": elements,
 		"evolutions": evolutions,
 		"art_path": art_path,
 	}
+
+
+static func _read_string_array(hero_data: Dictionary, key: String, path: String) -> Array[String]:
+	var values: Array[String] = []
+	var raw_value = hero_data.get(key, [])
+	if typeof(raw_value) == TYPE_ARRAY:
+		for value_variant in raw_value:
+			var value := String(value_variant).strip_edges()
+			if not value.is_empty():
+				values.append(value)
+	elif hero_data.has(key):
+		push_warning("Hero %s must be an array: %s" % [key, path])
+
+	return values
