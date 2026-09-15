@@ -2,6 +2,10 @@
   "id": "tunomon",
   "name": "Tunomon",
   "description": "A tiny Digimon that hardened one of the feelers it had on its head as Punimon. It has evolved in a more animal-like direction from Punimon, and is covered in tufty body hair. It is still at the peak of playfulness, and it has a prank-loving personality, but its combat instinct has not awakened.",
+  "fields": [],
+  "elements": [
+    "Earth"
+  ],
   "evolutions": [
     "gabumon"
   ]
