@@ -17,7 +17,7 @@ script = ExtResource("1_item")
 [node name="PortraitFrame" type="MarginContainer" parent="."]
 custom_minimum_size = Vector2(132, 132)
 layout_mode = 2
-size_flags_vertical = 4
+size_flags_vertical = 0
 theme_override_constants/margin_left = 4
 theme_override_constants/margin_top = 4
 theme_override_constants/margin_right = 4
@@ -35,14 +35,14 @@ stretch_mode = 5
 [node name="Text" type="VBoxContainer" parent="."]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_vertical = 4
-theme_override_constants/separation = 6
+size_flags_vertical = 0
+theme_override_constants/separation = 5
 
 [node name="Name" type="Label" parent="Text"]
 layout_mode = 2
 mouse_filter = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 28
 text = "Hero"
 
 [node name="Description" type="Label" parent="Text"]
@@ -50,6 +50,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 2
 theme_override_colors/font_color = Color(0.78, 0.82, 0.88, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 14
 text = "Description"
 autowrap_mode = 2
