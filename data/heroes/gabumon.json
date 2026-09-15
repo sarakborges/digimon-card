@@ -3,12 +3,11 @@
   "name": "Gabumon",
   "description": "Although it is covered by a fur pelt, it is clearly a Reptile Digimon. Due to its extremely timid and shy personality, it always gathers up the data that Garurumon leaves behind and shapes it into a fur pelt to wear. That fur pelt of Garurumon, who is feared by other Digimon, thus plays a role in safeguarding and protecting Gabumon. When it is wearing the fur pelt, its personality does a complete 180° shift.",
   "fields": [
-    "Metal Empire",
     "Nature Spirits",
     "Virus Busters",
-    "Wind Guardians"
+    "Metal Empire"
   ],
   "elements": [
-    "Ice"
+    "Fire"
   ]
 }
