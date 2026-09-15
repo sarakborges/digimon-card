@@ -2,8 +2,9 @@ extends HBoxContainer
 
 var hero_data: Dictionary = {}
 
-@onready var portrait: TextureRect = $Portrait
-@onready var name_label: Label = $Name
+@onready var portrait: TextureRect = $PortraitFrame/Portrait
+@onready var name_label: Label = $Text/Name
+@onready var description_label: Label = $Text/Description
 
 
 func _ready() -> void:
@@ -15,6 +16,7 @@ func _apply_data() -> void:
 		return
 
 	name_label.text = String(hero_data.get("name", ""))
+	description_label.text = String(hero_data.get("description", ""))
 
 	var art_path := String(hero_data.get("art_path", ""))
 	if art_path.is_empty() or not ResourceLoader.exists(art_path):
