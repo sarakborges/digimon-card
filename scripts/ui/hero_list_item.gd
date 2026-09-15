@@ -28,28 +28,36 @@ func _ready() -> void:
 
 
 func _configure_layout() -> void:
+	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
+
 	if compact:
 		custom_minimum_size = Vector2(0.0, 52.0)
 		content.add_theme_constant_override("separation", 12)
 		portrait_frame.custom_minimum_size = Vector2(48.0, 48.0)
+		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		portrait_frame.add_theme_constant_override("margin_left", 2)
 		portrait_frame.add_theme_constant_override("margin_top", 2)
 		portrait_frame.add_theme_constant_override("margin_right", 2)
 		portrait_frame.add_theme_constant_override("margin_bottom", 2)
 		portrait.custom_minimum_size = Vector2(44.0, 44.0)
+		text_container.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		text_container.add_theme_constant_override("separation", 0)
+		name_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 		name_label.add_theme_font_size_override("font_size", 24)
 		description_label.visible = false
 	else:
 		custom_minimum_size = Vector2(0.0, 148.0)
 		content.add_theme_constant_override("separation", 24)
 		portrait_frame.custom_minimum_size = Vector2(132.0, 132.0)
+		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		portrait_frame.add_theme_constant_override("margin_left", 4)
 		portrait_frame.add_theme_constant_override("margin_top", 4)
 		portrait_frame.add_theme_constant_override("margin_right", 4)
 		portrait_frame.add_theme_constant_override("margin_bottom", 4)
 		portrait.custom_minimum_size = Vector2(124.0, 124.0)
+		text_container.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		text_container.add_theme_constant_override("separation", 5)
+		name_label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 		name_label.add_theme_font_size_override("font_size", 28)
 		description_label.visible = true
 
@@ -105,6 +113,10 @@ func _load_png_texture(path: String) -> ImageTexture:
 	var error := image.load_png_from_buffer(bytes)
 	if error != OK:
 		return null
+
+	var mipmap_error := image.generate_mipmaps()
+	if mipmap_error != OK:
+		push_warning("Unable to generate mipmaps for hero art: %s" % path)
 
 	return ImageTexture.create_from_image(image)
 
