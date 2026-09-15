@@ -2,6 +2,7 @@ extends Control
 
 const LIBRARY_SCENE := "res://scenes/library_screen.tscn"
 const HERO_LIST_ITEM_SCENE := preload("res://scenes/ui/hero_list_item.tscn")
+const HERO_DETAILS_SCENE := preload("res://scenes/hero_details.tscn")
 const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 
 @onready var side_menu = $SideMenu
@@ -23,7 +24,20 @@ func _populate_heroes() -> void:
 	for hero in heroes:
 		var item = HERO_LIST_ITEM_SCENE.instantiate()
 		item.hero_data = hero
+		item.hero_pressed.connect(_on_hero_pressed)
 		hero_list.add_child(item)
+
+
+func _on_hero_pressed(hero_id: String) -> void:
+	var details = HERO_DETAILS_SCENE.instantiate()
+	details.hero_id = hero_id
+
+	var current_scene := get_tree().current_scene
+	get_tree().root.add_child(details)
+	get_tree().current_scene = details
+
+	if current_scene != null:
+		current_scene.queue_free()
 
 
 func _on_side_menu_item_pressed(item_id: StringName) -> void:
