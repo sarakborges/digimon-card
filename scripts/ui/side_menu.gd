@@ -65,7 +65,7 @@ func _create_item(item_id: StringName, label_text: String) -> Control:
 	button.add_theme_stylebox_override("focus", empty_style)
 
 	var label := Label.new()
-	button.add_child(label)
+	item.add_child(label)
 	label.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	label.add_theme_color_override("font_color", Color.WHITE)
