@@ -15,12 +15,12 @@ static func load_listed() -> Array[Dictionary]:
 
 
 static func load_by_id(hero_id: String) -> Dictionary:
-	for hero in load_all():
-		if String(hero.get("id", "")) == hero_id:
-			return hero
+	var normalized_id := hero_id.strip_edges()
+	if normalized_id.is_empty() or normalized_id.contains("/") or normalized_id.contains("\\") or normalized_id.contains(".."):
+		push_warning("Invalid hero id: %s" % hero_id)
+		return {}
 
-	push_warning("Hero not found: %s" % hero_id)
-	return {}
+	return _load_hero("%s/%s.json" % [HERO_DATA_DIR, normalized_id])
 
 
 static func _load_manifest(manifest_path: String) -> Array[Dictionary]:
@@ -71,6 +71,16 @@ static func _load_hero(path: String) -> Dictionary:
 		push_warning("Hero data requires id and name: %s" % path)
 		return {}
 
+	var evolutions: Array[String] = []
+	var raw_evolutions = hero_data.get("evolutions", [])
+	if typeof(raw_evolutions) == TYPE_ARRAY:
+		for evolution_variant in raw_evolutions:
+			var evolution_id := String(evolution_variant).strip_edges()
+			if not evolution_id.is_empty():
+				evolutions.append(evolution_id)
+	elif hero_data.has("evolutions"):
+		push_warning("Hero evolutions must be an array: %s" % path)
+
 	var art_path := "%s/%s.png" % [HERO_ASSET_DIR, id]
 	if not FileAccess.file_exists(art_path):
 		push_warning("Hero art not found: %s" % art_path)
@@ -79,5 +89,6 @@ static func _load_hero(path: String) -> Dictionary:
 		"id": id,
 		"name": name,
 		"description": description,
+		"evolutions": evolutions,
 		"art_path": art_path,
 	}
