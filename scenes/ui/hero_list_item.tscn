@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://scripts/ui/hero_list_item.gd" id="1_item"]
 
 [sub_resource type="Shader" id="Shader_portrait"]
-code = "shader_type canvas_item;\n\nuniform vec4 border_color : source_color = vec4(0.36, 0.67, 1.0, 1.0);\nuniform float border_width = 0.055;\nuniform float edge_softness = 0.008;\n\nvoid fragment() {\n\tvec2 centered = UV - vec2(0.5);\n\tfloat distance_from_center = length(centered);\n\tfloat outer_alpha = 1.0 - smoothstep(0.5 - edge_softness, 0.5, distance_from_center);\n\tfloat inner_radius = 0.5 - border_width;\n\tfloat border_mix = smoothstep(inner_radius - edge_softness, inner_radius + edge_softness, distance_from_center);\n\n\tvec4 art = texture(TEXTURE, UV);\n\tvec4 result = mix(art, border_color, border_mix);\n\tresult.a *= outer_alpha;\n\tCOLOR = result;\n}\n"
+code = "shader_type canvas_item;\n\nuniform vec4 border_color : source_color = vec4(0.36, 0.67, 1.0, 1.0);\nuniform float border_width = 0.055;\nuniform float edge_softness = 0.008;\nuniform float art_scale = 0.80;\n\nvoid fragment() {\n\tvec2 centered = UV - vec2(0.5);\n\tfloat distance_from_center = length(centered);\n\tfloat outer_alpha = 1.0 - smoothstep(0.5 - edge_softness, 0.5, distance_from_center);\n\tfloat inner_radius = 0.5 - border_width;\n\tfloat border_mix = smoothstep(inner_radius - edge_softness, inner_radius + edge_softness, distance_from_center);\n\n\tvec2 art_uv = centered / art_scale + vec2(0.5);\n\tart_uv = clamp(art_uv, vec2(0.0), vec2(1.0));\n\tvec4 art = texture(TEXTURE, art_uv);\n\tvec4 result = mix(art, border_color, border_mix);\n\tresult.a *= outer_alpha;\n\tCOLOR = result;\n}\n"
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_portrait"]
 shader = SubResource("Shader_portrait")
@@ -30,7 +30,7 @@ layout_mode = 2
 mouse_filter = 2
 texture_filter = 2
 expand_mode = 1
-stretch_mode = 6
+stretch_mode = 5
 
 [node name="Text" type="VBoxContainer" parent="."]
 layout_mode = 2
