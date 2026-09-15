@@ -41,8 +41,8 @@ func _apply_data() -> void:
 	description_label.text = String(hero_data.get("description", ""))
 
 	var art_path := String(hero_data.get("art_path", ""))
-	if art_path.is_empty() or not ResourceLoader.exists(art_path):
-		push_warning("Hero art not found: %s" % art_path)
+	if art_path.is_empty():
+		push_warning("Hero art path is empty")
 		return
 
 	var texture := load(art_path) as Texture2D
