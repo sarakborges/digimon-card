@@ -45,7 +45,13 @@ grow_vertical = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 1
 
-[node name="HeroContent" type="VBoxContainer" parent="HeroScroll"]
+[node name="ContentMargin" type="MarginContainer" parent="HeroScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_bottom = 20
+
+[node name="HeroContent" type="VBoxContainer" parent="HeroScroll/ContentMargin"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 56
