@@ -31,7 +31,7 @@ item_ids = PackedStringArray("heroes", "cards")
 item_labels = PackedStringArray("Heroes", "Cards")
 active_item_id = "heroes"
 
-[node name="HeroContent" type="VBoxContainer" parent="."]
+[node name="HeroScroll" type="ScrollContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -42,6 +42,12 @@ offset_right = -32.0
 offset_bottom = -104.0
 grow_horizontal = 2
 grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="HeroContent" type="VBoxContainer" parent="HeroScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 28
 
 [node name="ReturnButton" type="Button" parent="."]
 layout_mode = 1
