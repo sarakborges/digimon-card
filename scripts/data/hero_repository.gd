@@ -30,6 +30,15 @@ static func load_all() -> Array[Dictionary]:
 	return heroes
 
 
+static func load_by_id(hero_id: String) -> Dictionary:
+	for hero in load_all():
+		if String(hero.get("id", "")) == hero_id:
+			return hero
+
+	push_warning("Hero not found: %s" % hero_id)
+	return {}
+
+
 static func _sort_by_name(a: Dictionary, b: Dictionary) -> bool:
 	return String(a["name"]).nocasecmp_to(String(b["name"])) < 0
 
