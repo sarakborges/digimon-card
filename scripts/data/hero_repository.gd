@@ -2,19 +2,37 @@ extends RefCounted
 
 const HERO_DATA_DIR := "res://data/heroes"
 const HERO_INDEX_PATH := HERO_DATA_DIR + "/index.json"
+const HERO_LIST_PATH := HERO_DATA_DIR + "/list.json"
 const HERO_ASSET_DIR := "res://assets/heroes"
 
 
 static func load_all() -> Array[Dictionary]:
+	return _load_manifest(HERO_INDEX_PATH)
+
+
+static func load_listed() -> Array[Dictionary]:
+	return _load_manifest(HERO_LIST_PATH)
+
+
+static func load_by_id(hero_id: String) -> Dictionary:
+	for hero in load_all():
+		if String(hero.get("id", "")) == hero_id:
+			return hero
+
+	push_warning("Hero not found: %s" % hero_id)
+	return {}
+
+
+static func _load_manifest(manifest_path: String) -> Array[Dictionary]:
 	var heroes: Array[Dictionary] = []
-	var manifest_file := FileAccess.open(HERO_INDEX_PATH, FileAccess.READ)
+	var manifest_file := FileAccess.open(manifest_path, FileAccess.READ)
 	if manifest_file == null:
-		push_warning("Unable to read hero manifest: %s" % HERO_INDEX_PATH)
+		push_warning("Unable to read hero manifest: %s" % manifest_path)
 		return heroes
 
 	var parsed_manifest = JSON.parse_string(manifest_file.get_as_text())
 	if typeof(parsed_manifest) != TYPE_ARRAY:
-		push_warning("Invalid hero manifest: %s" % HERO_INDEX_PATH)
+		push_warning("Invalid hero manifest: %s" % manifest_path)
 		return heroes
 
 	for file_name_variant in parsed_manifest:
@@ -28,15 +46,6 @@ static func load_all() -> Array[Dictionary]:
 
 	heroes.sort_custom(_sort_by_name)
 	return heroes
-
-
-static func load_by_id(hero_id: String) -> Dictionary:
-	for hero in load_all():
-		if String(hero.get("id", "")) == hero_id:
-			return hero
-
-	push_warning("Hero not found: %s" % hero_id)
-	return {}
 
 
 static func _sort_by_name(a: Dictionary, b: Dictionary) -> bool:
