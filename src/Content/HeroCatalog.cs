@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using DigimonCard.Domain;
 
 namespace DigimonCard.Content;
