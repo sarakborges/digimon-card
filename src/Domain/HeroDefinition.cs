@@ -1,3 +1,5 @@
+using System;
+
 namespace DigimonCard.Domain;
 
 public sealed record HeroDefinition
