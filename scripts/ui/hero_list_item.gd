@@ -5,6 +5,7 @@ signal hero_pressed(hero_id: String)
 const HERO_REPOSITORY := preload("res://scripts/data/hero_repository.gd")
 const IDLE_GLOW := Color(0.36, 0.67, 1.0, 0.0)
 const HOVER_GLOW := Color(0.36, 0.67, 1.0, 0.38)
+const DETAILED_MIN_HEIGHT := 196.0
 
 @export var hero_id := ""
 @export var compact := true
@@ -29,6 +30,10 @@ func _ready() -> void:
 	_apply_data()
 	_configure_interaction()
 
+	if not compact:
+		resized.connect(_on_detailed_resized)
+		call_deferred("_sync_detailed_minimum_height")
+
 
 func _configure_layout() -> void:
 	portrait.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
@@ -50,7 +55,7 @@ func _configure_layout() -> void:
 		description_label.visible = false
 		metadata.visible = false
 	else:
-		custom_minimum_size = Vector2(0.0, 196.0)
+		custom_minimum_size = Vector2(0.0, DETAILED_MIN_HEIGHT)
 		content.add_theme_constant_override("separation", 24)
 		portrait_frame.custom_minimum_size = Vector2(132.0, 132.0)
 		portrait_frame.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
@@ -106,6 +111,19 @@ func _apply_data() -> void:
 		return
 
 	portrait.texture = texture
+
+
+func _sync_detailed_minimum_height() -> void:
+	if compact or not is_node_ready():
+		return
+
+	var target_height := max(DETAILED_MIN_HEIGHT, content.get_combined_minimum_size().y)
+	if abs(custom_minimum_size.y - target_height) > 0.5:
+		custom_minimum_size.y = target_height
+
+
+func _on_detailed_resized() -> void:
+	call_deferred("_sync_detailed_minimum_height")
 
 
 func _format_values(values_variant: Variant) -> String:
