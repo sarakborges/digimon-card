@@ -1,0 +1,15 @@
+# Godot generated data
+.godot/
+
+# .NET build output
+bin/
+obj/
+
+# IDE/user files
+*.csproj.user
+.vscode/
+.idea/
+
+# OS metadata
+.DS_Store
+Thumbs.db

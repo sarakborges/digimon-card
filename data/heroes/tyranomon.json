@@ -1,0 +1,14 @@
+{
+  "id": "tyranomon",
+  "name": "Tyranomon",
+  "description": "A Digimon that resembles an ancient dinosaur that existed in the prehistoric world. It sweeps everything away with its two well-developed arms and its gigantic tail. It is extremely easy to tame due to its intelligence and docile personality. For that reason, it is highly valued by beginner Tamers, and is often raised with care. You could probably say that it is a representative figure of the most basic Digimon.",
+  "fields": [
+    "Nature Spirits",
+    "Metal Empire",
+    "Dragon's Roar",
+    "Nightmare Soldiers"
+  ],
+  "elements": [
+    "Fire"
+  ]
+}

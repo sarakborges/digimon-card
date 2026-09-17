@@ -1,0 +1,15 @@
+{
+  "id": "koromon",
+  "name": "Koromon",
+  "description": "A tiny Digimon that shed the fuzz covering its surface, and whose body grew even bigger. Although it has become able to move around more actively, it is still unable to battle. It can produce bubbles from its mouth to intimidate opponents.",
+  "fields": [
+    "Dragon's Roar",
+    "Virus Busters"
+  ],
+  "elements": [
+    "Fire"
+  ],
+  "evolutions": [
+    "agumon"
+  ]
+}

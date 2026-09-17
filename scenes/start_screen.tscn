@@ -1,0 +1,27 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/start_screen.gd" id="1_start"]
+[ext_resource type="PackedScene" path="res://scenes/ui/side_menu.tscn" id="2_side_menu"]
+
+[node name="StartScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_start")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.09, 0.125, 0.165, 1)
+
+[node name="SideMenu" parent="." instance=ExtResource("2_side_menu")]
+item_ids = PackedStringArray("library", "exit")
+item_labels = PackedStringArray("Library", "Exit Game")
